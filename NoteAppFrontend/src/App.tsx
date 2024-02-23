@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { FormEvent, useState } from 'react'
 import './App.css'
+import { NoteComponent } from './components/NoteComponent'
+import { Note } from './models/export interface Note {'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [notes, setNotes] = useState<Note[]>([])
+  const [title, setTitle] = useState("")
+  const [content, setContent] = useState("")
+
+  function addNewNote(event: FormEvent) {
+    event.preventDefault()
+
+    setNotes([
+      ...notes, {
+        id: notes.length.toString(),
+        title,
+        content,
+        createdAt: Number(Date.now),
+        updatedAt: null,
+      }
+    ])
+  }
+
+  function NotesContent() {
+    if (!notes.length) {
+      return <p>You don't have any notes at the moment</p>
+    }
+
+    return (
+      notes.map(note => (
+        <div>
+          <NoteComponent title={note.title} content={note.content} />
+        </div>
+      ))
+    )
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Note Taker App</h1>
+      <form onSubmit={addNewNote}>
+        <label htmlFor="input-title">Title</label>
+        <input type='text' name='content' id='input-title'
+          value={title}
+          onChange={(e) => setTitle(e.target.value)} />
+        <label htmlFor="input-content">Content</label>
+        <input type="text" name="content" id="input-content"
+        value={content}
+        onChange={(e) => setContent(e.target.value)} />
+        <button disabled={!title || !content}>Save</button>
+      </form>
+      <NotesContent />
     </>
   )
 }
+
 
 export default App
