@@ -1,0 +1,23 @@
+.noteTitle {
+  background-color: lightgray;
+  font-weight: bold;
+  color: black;
+  text-align: start;
+  padding: 8px;
+  margin: 0;
+}
+
+.noteTitle:hover {
+  background-color: rgb(206, 206, 206);
+}
+
+.noteContent {
+  background-color: rgb(250, 250, 250);
+  width: 100% auto;
+  margin-bottom: 8px;
+  border: 1px solid black;
+}
+
+.noteContainer p {
+  margin: 0px;
+}

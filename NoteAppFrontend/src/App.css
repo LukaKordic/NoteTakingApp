@@ -1,6 +1,15 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
+  max-width: auto;
   padding: 2rem;
   text-align: center;
+}
+
+#pageTitle {
+  background-color: greenyellow;
+}
+
+#notesContainer {
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
