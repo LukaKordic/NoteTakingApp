@@ -3,31 +3,36 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocalNoteStorage = void 0;
 class LocalNoteStorage {
     constructor() {
-        this.notes = Array();
+        this.notes = new Map();
     }
     getNotes() {
-        return this.notes;
+        const notesArray = [];
+        for (let note of this.notes.values()) {
+            notesArray.push(note);
+        }
+        return notesArray;
     }
     saveNote(note) {
-        this.notes.push(note);
+        if (this.notes.has(note.id))
+            throw new HttpError(409, `A note with id ${note.id} already exists.`);
+        this.notes.set(note.id, note);
+        return note;
     }
     updateNote(note) {
-        let noteToUpdate = this.notes.find((note) => {
-            noteToUpdate = note;
-        });
+        let noteToUpdate = this.notes.get(note.id);
         if (!noteToUpdate)
-            throw new Error("Note ${note.title} cannot be found");
-        const index = this.notes.indexOf(note);
-        this.notes.splice(index, 1, noteToUpdate);
-        return noteToUpdate;
+            throw new Error(`Note ${note.title} cannot be found`);
+        noteToUpdate = note;
+        this.notes.set(note.id, noteToUpdate);
+        return note;
     }
     deleteNote(noteId) {
-        const index = this.notes.findIndex((note) => {
-            note.id === noteId;
-        });
-        if (index === -1)
-            return undefined;
-        return this.notes.splice(index, 1)[0];
+        if (this.notes.delete(noteId)) {
+            return noteId;
+        }
+        else {
+            throw Error(`Note with ${noteId} doesn't exist`);
+        }
     }
 }
 exports.LocalNoteStorage = LocalNoteStorage;

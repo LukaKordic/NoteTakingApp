@@ -7,16 +7,32 @@ const express_1 = __importDefault(require("express"));
 const LocalNoteStorage_1 = require("./notes/LocalNoteStorage");
 const Note_1 = require("./notes/model/Note");
 const app = (0, express_1.default)();
+app.use(express_1.default.json());
 const PORT = 8080;
-const noteStorage = new LocalNoteStorage_1.LocalNoteStorage();
-noteStorage.saveNote(new Note_1.Note("id", "title", "content", 3271898, 8437289));
+const noteStorage = new LocalNoteStorage_1.LocalNoteStorage(); // Inject this as an abstract type
 app.listen(PORT, () => {
     console.log("App listening on port ${PORT}");
 });
-app.post("/api/notes", (req, res) => {
-    const note = req.body();
-});
-app.get('/notes', (req, res) => {
+app.get("/api/notes", (req, res) => {
     res.json(noteStorage.getNotes());
 });
-app.delete("/api/notes/:noteId");
+app.post("/api/notes", (req, res) => {
+    try {
+        const body = req.body;
+        const newNote = new Note_1.Note(body.id, body.title, body.content);
+        noteStorage.saveNote(newNote);
+        res.json(newNote);
+    }
+    catch (e) {
+        if (e instanceof HttpError) {
+            res.status(e.statusCode).send(e.message);
+        }
+        else {
+            res.sendStatus(400);
+        }
+    }
+});
+app.delete("/api/notes/:noteId", (req, res) => {
+    const param = req.params;
+    param.noteId;
+});

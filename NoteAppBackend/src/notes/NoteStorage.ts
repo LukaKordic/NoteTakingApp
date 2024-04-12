@@ -1,8 +1,8 @@
-import { Note } from "./model/Note"
+import { Note } from "./model/Note";
 
 export interface NoteStorage {
-    getNotes(): Array<Note>
-    saveNote(note: Note): void
-    updateNote(note: Note): Note
-    deleteNote(noteId: string): Note | undefined
+  getNotes(): Array<Note>;
+  saveNote(note: Note): void;
+  updateNote(noteId: string, title: string, content: string): Note;
+  deleteNote(noteId: string): string | undefined;
 }
